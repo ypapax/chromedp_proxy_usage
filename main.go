@@ -26,8 +26,8 @@ func main() {
 	defer cancel()
 
 	//u := `https://golang.org/pkg/time/`
-	u := `https://www.whatismybrowser.com/detect/what-is-my-user-agent`
-	selector := `html`
+	u := `https://www.myip.com/`
+	selector := `#ip`
 	log.Println("requesting", u)
 	log.Println("selector", selector)
 	// navigate to a page, wait for an element, click
@@ -37,10 +37,10 @@ func main() {
 		// wait for footer element is visible (ie, page is loaded)
 		chromedp.WaitReady(selector),
 		// retrieve the value of the textarea
-		chromedp.OuterHTML(selector, &example),
+		chromedp.Text(selector, &example),
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("Go's time.After example:\n%s", example)
+	log.Printf("ip:\n%s", example)
 }
