@@ -5,10 +5,8 @@ package main
 
 import (
 	"context"
-	"log"
-	"time"
-
 	"github.com/chromedp/chromedp"
+	"log"
 )
 
 func main() {
@@ -26,8 +24,8 @@ func main() {
 	defer cancel()
 
 	// create a timeout
-	ctx, cancel = context.WithTimeout(ctx, 300 * time.Second)
-	defer cancel()
+	//ctx, cancel = context.WithTimeout(ctx, 300 * time.Second)
+	//defer cancel()
 
 	//u := `https://golang.org/pkg/time/`
 	u := `https://www.myip.com/`
