@@ -15,14 +15,18 @@ func main() {
 	log.SetFlags(log.LstdFlags | log.Llongfile)
 	log.Println("main")
 	// create chrome instance
-	ctx, cancel := chromedp.NewContext(
-		context.Background(),
-		chromedp.WithLogf(log.Printf),
+	o := append(chromedp.DefaultExecAllocatorOptions[:],
+		//... any options here
+		chromedp.ProxyServer("http://118.99.127.22:8080"),
 	)
+	ctx, cancel := chromedp.NewExecAllocator(context.Background(), o...)
+	defer cancel()
+
+	ctx, cancel = chromedp.NewContext(ctx, chromedp.WithLogf(log.Printf))
 	defer cancel()
 
 	// create a timeout
-	ctx, cancel = context.WithTimeout(ctx, 15 * time.Second)
+	ctx, cancel = context.WithTimeout(ctx, 300 * time.Second)
 	defer cancel()
 
 	//u := `https://golang.org/pkg/time/`
@@ -30,6 +34,7 @@ func main() {
 	selector := `#ip`
 	log.Println("requesting", u)
 	log.Println("selector", selector)
+
 	// navigate to a page, wait for an element, click
 	var example string
 	err := chromedp.Run(ctx,
