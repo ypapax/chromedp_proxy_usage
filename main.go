@@ -7,29 +7,35 @@ import (
 	"context"
 	"github.com/chromedp/chromedp"
 	"log"
+	"time"
 )
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Llongfile)
-	log.Println("main")
+	proxy := "http://118.99.127.22:8080"
+	log.Println("proxy: ", proxy)
+
 	// create chrome instance
 	o := append(chromedp.DefaultExecAllocatorOptions[:],
 		//... any options here
-		chromedp.ProxyServer("http://118.99.127.22:8080"),
+		chromedp.ProxyServer(proxy),
 	)
-	ctx, cancel := chromedp.NewExecAllocator(context.Background(), o...)
-	defer cancel()
-
-	ctx, cancel = chromedp.NewContext(ctx, chromedp.WithLogf(log.Printf))
-	defer cancel()
-
 	// create a timeout
-	//ctx, cancel = context.WithTimeout(ctx, 300 * time.Second)
-	//defer cancel()
+	ctx1, cancel1 := context.WithTimeout(context.Background(), 300 * time.Second)
+	defer cancel1()
+	//ctx1 := context.Background()
+
+	ctx2, cancel2 := chromedp.NewExecAllocator(ctx1, o...)
+	defer cancel2()
+
+	ctx, cancel := chromedp.NewContext(ctx2, chromedp.WithLogf(log.Printf))
+	defer cancel()
+
+
 
 	//u := `https://golang.org/pkg/time/`
-	u := `https://www.myip.com/`
-	selector := `#ip`
+	u := `https://ifconfig.me/`
+	selector := `#ip_address`
 	log.Println("requesting", u)
 	log.Println("selector", selector)
 
